@@ -1,5 +1,6 @@
 package service;
 
+import exception.EmployeeNotFoundException;
 import model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -53,17 +54,17 @@ public class DepartmentService {
     return employeeService.getAll().stream()
         .filter(employee -> employee.getDepartment() == department)
         .min(Comparator.comparingInt(Employee::getSalary))
-        .orElse(null);
+        .orElseThrow(EmployeeNotFoundException::new);
   }
 
   public Employee findEmployeeWithMaxSalaryFromDepartment(int department) {
     return employeeService.getAll().stream()
         .filter(employee -> employee.getDepartment() == department)
         .max(Comparator.comparingInt(Employee::getSalary))
-        .orElse(null);
+        .orElseThrow(EmployeeNotFoundException::new);
   }
 
-  public Map<Integer, List<Employee>> findEmployeesByDepartment() {
+  public Map<Integer, List<Employee>> groupEmployeesByDepartment() {
     return employeeService.getAll().stream()
         .collect(Collectors.groupingBy(Employee::getDepartment));
   }
